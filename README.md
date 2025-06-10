@@ -10,7 +10,7 @@ This repository contains automation workflows built with [n8n](https://n8n.io/),
 
 ---
 
-## 🚀 Configuring the MCP Client for GitHub
+## 🚀 Configuring the MCP Client environment
 
 1. Ensure your instance of n8n is **self-hosted**.
 2. Keep your n8n instance **updated** to access the latest community nodes.

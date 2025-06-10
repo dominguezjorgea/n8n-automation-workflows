@@ -10,7 +10,7 @@ This repository contains automation workflows built with [n8n](https://n8n.io/),
 
 ---
 
-## 🚀 1. Configure Custom MCP Nodes in Self-hosted n8n
+## 🚀 Configuring the MCP Client for GitHub
 
 1. Ensure your instance of n8n is **self-hosted**.
 2. Keep your n8n instance **updated** to access the latest community nodes.
@@ -20,59 +20,60 @@ This repository contains automation workflows built with [n8n](https://n8n.io/),
 6. If already installed, you'll receive a notification.
 7. After installation, ensure the node is up to date.
 
----
+## Configuring the MCP Client for GitHub
 
-## 🛠️ 2. Enable Environment Variable to Use Community Nodes as Tools
+To connect your AI agent in N8N to an MCP GitHub server, you need to configure a credential with your GitHub personal access token.
 
-To use MCP nodes as **tools** for AI agents:
+1.  In N8N, go to **Credentials** and create a new credential.
+2.  Select the credential type corresponding to the MCP node you installed (likely named "MCP Credential" or similar).
+3.  Configure the following fields:
+    - **Command:** `mpx -y`
+    - **Arguments:** `github-mcp`
+    - **Environment Variables:** Here you will add your GitHub token. The variable is named `GITHUB_PERSONAL_ACCESS_TOKEN`.
+      - **How to get your `GITHUB_PERSONAL_ACCESS_TOKEN`:**
+        - Go to your GitHub account on the web.
+        - Click on your profile and then on `Settings`.
+        - In the side menu, select `Developer settings`.
+        - Click on `Personal access tokens`.
+        - Select **`Tokens (classic)`**.
+        - Click on `Generate new token` and then on `Generate new token (classic)`.
+        - Give it a descriptive name.
+        - Set an **expiration** for the token (for security, do not select "No expiration" unless strictly necessary). For example, 7 days.
+        - **Select the necessary permissions (scopes)** [2, 4]. This is crucial and must align with the capabilities of the GitHub MCP server. For common actions, you need permissions such as accessing `commits`, `public repos`, `invitations`, **`read and write` on `workflows`**, `write package`, and potentially some `admin.org` permissions. **Be extremely careful with administration permissions**, as an agent could delete repositories or even your account if it has broad permissions.
+        - Click on `Generate token`.
+        - **Copy the generated token immediately** [2]. Once you leave the page, you won't be able to see it again.
+      - Return to N8N and in the `Environment Variables` field, add your token with the syntax: `GITHUB_PERSONAL_ACCESS_TOKEN=YOUR_COPIED_TOKEN_HERE`.
+4.  Click **Save** the credential.
 
-1. Add the following environment variable to your Docker or VPS setup:
+Done! You now have an MCP credential configured for GitHub, allowing your AI agents to perform actions like creating, updating, or searching repositories, managing pull requests, etc.
 
-   ```env
-   N8N_COMMUNITY_PACKAGE_ALLOW="packageName1, packageName2"
-   ```
+## Configuring the MCP Client for Firecrawl
 
-## 3. Configuración del Cliente MCP para GitHub
+To connect your AI agent in N8N to an MCP Firecrawl server (a web scraping service), you need to configure a credential with your Firecrawl API Key [2, 6].
 
-Para conectar tu agente de IA en N8N a un servidor MCP de GitHub, necesitas configurar una credencial con tu token de acceso personal de GitHub. [5]
+1.  In N8N, go to **Credentials** and create a new credential [4].
+2.  Select the MCP credential type [4].
+3.  Configure the following fields:
+    - **Command:** `mpx -y` [2]
+    - **Arguments:** `firecrawl-mcp` [2]
+    - **Environment Variables:** Here you will add your Firecrawl API Key [2, 6].
+      - **How to get your Firecrawl API Key:**
+        - Go to the Firecrawl website and log into your account [6].
+        - Your API Key will be visible on your dashboard or account settings for you to copy [6].
+      - Return to N8N and in the `Environment Variables` field, add your API Key [6]. The syntax is `YOUR_FIRECRAWL_VARIABLE_NAME=YOUR_COPIED_API_KEY_HERE` [2, 6]. (Note: The exact name of the environment variable for the Firecrawl API Key is not specified in the provided sources, but it follows the pattern `SERVICE_NAME_API_KEY`. You should verify the exact name if you find specific documentation for the Firecrawl MCP server you are using, although the pattern `FIRECRAWL_API_KEY` is common).
+4.  Click **Save** the credential [2].
 
-1.  En N8N, ve a **Credenciales** y crea una nueva credencial. [5]
-2.  Selecciona el tipo de credencial que corresponde al nodo MCP que instalaste (probablemente se llame "MCP Credencial" o similar). [5]
-3.  Configura los siguientes campos: [5]
-    - **Command:** `mpx -y` [5]
-    - **Arguments:** `github-mcp` [5]
-    - **Environment Variables:** Aquí añadirás tu token de GitHub. La variable se llama `GITHUB_PERSONAL_ACCESS_TOKEN`. [3, 5]
-      - **Cómo obtener tu `GITHUB_PERSONAL_ACCESS_TOKEN`:** [5]
-        - Ve a tu cuenta de GitHub en la web. [5]
-        - Haz clic en tu perfil y luego en `Settings`. [5]
-        - En el menú lateral, selecciona `Developer settings`. [5]
-        - Haz clic en `Personal access tokens`. [5]
-        - Selecciona **`Tokens (classic)`**. [5]
-        - Haz clic en `Generate new token` y luego en `Generate new token (classic)`. [5]
-        - Asígnale un nombre descriptivo. [5]
-        - Establece una **expiración** para el token (por seguridad, no selecciones "No expiration" a menos que sea estrictamente necesario). Por ejemplo, 7 días. [5]
-        - **Selecciona los permisos (scopes)** necesarios. Esto es crucial y debe alinearse con las capacidades del servidor MCP de GitHub. Para acciones comunes, necesitas permisos como acceder a `commits`, `public repos`, `invitations`, **`read and write` en `workflows`**, `write package`, y potencialmente algunos permisos de `admin.org`. [3] **Sé extremadamente cuidadoso con los permisos de administración**, ya que un agente podría borrar repositorios o incluso tu cuenta si tiene permisos amplios. [3]
-        - Haz clic en `Generate token`. [3]
-        - **Copia el token generado inmediatamente**. Una vez que abandones la página, no podrás verlo de nuevo. [3]
-      - Regresa a N8N y en el campo `Environment Variables`, añade tu token con la sintaxis: `GITHUB_PERSONAL_ACCESS_TOKEN=TU_TOKEN_COPIADO_AQUI`. [5]
-4.  Haz clic en **Guardar** la credencial. [3]
+Finished! Now you can use the Firecrawl MCP credential for your AI agents to interact with this service, performing actions like `scrape` (extracting content from a web page) or `map` (discovering URLs from a starting point) [7].
 
-¡Listo! Ya tienes una credencial MCP configurada para GitHub, permitiendo a tus agentes de IA realizar acciones como crear, actualizar o buscar repositorios, gestionar pull requests, etc. [5, 6]
+_(Optional):_ The sources mention that you can connect to Firecrawl (and other) MCP servers through marketplaces like Smitery [3, 8, 9]. In this case, the `mpx` command and arguments might be provided by the marketplace, and they will typically still require your Firecrawl API Key in the environment variables [6].
 
-## 4. Configuración del Cliente MCP para Firecrawl
+## Using MCP Clients in N8N Workflows
 
-Para conectar tu agente de IA en N8N a un servidor MCP de Firecrawl (un servicio para web scraping), necesitas configurar una credencial con tu API Key de Firecrawl. [3]
+Once the credentials are configured, you can use the **MCP Client** node in your N8N workflows [10]. This node will allow you to:
 
-1.  En N8N, ve a **Credenciales** y crea una nueva credencial. [5]
-2.  Selecciona el tipo de credencial MCP. [5]
-3.  Configura los siguientes campos: [5]
-    - **Command:** `mpx -y` [3]
-    - **Arguments:** `firecrawl-mcp` [3]
-    - **Environment Variables:** Aquí añadirás tu API Key de Firecrawl. [7]
-      - **Cómo obtener tu Firecrawl API Key:**
-        - Ve al sitio web de Firecrawl e inicia sesión en tu cuenta. [7]
-        - Tu API Key estará visible en tu dashboard o configuración de cuenta para que la copies. [7]
-      - Regresa a N8N y en el campo `Environment Variables`, añade tu API Key. La sintaxis es `NOMBRE_VARIABLE_FIRECRAWL=TU_API_KEY_COPIADA_AQUI`. (Nota: El nombre exacto de la variable de entorno para la API Key de Firecrawl no se especifica en los fuentes proporcionados, pero sigue el patrón `NOMBRE_SERVICIO_API_KEY`. Deberías verificar el nombre exacto si encuentras documentación específica para el servidor Firecrawl MCP que estás usando, aunque el patrón `FIRECRAWL_API_KEY` es común). [7]
-4.  Haz clic en **Guardar** la credencial.
+1.  Select the MCP credential you created for GitHub or Firecrawl [10].
+2.  Choose an **operation**:
+    - `list tools`: For the AI agent (or you) to discover the capabilities (`tools`) that the MCP server exposes [10].
+    - `execute tool`: For the agent to execute a specific capability of the server, passing the necessary parameters [10]. The AI agent can even automatically decide which `tool` to execute [10].
 
-¡Hecho! Ahora puedes usar la credencial de Firecrawl MCP para que tus agentes de IA interactúen con este servicio, realizando acciones como `scrape` (extraer contenido de una página web) o `map` (descubrir URLs desde un punto de partida). [8]
+With these configurations, your AI agents in N8N can leverage the capabilities of services like GitHub and Firecrawl in a standardized and efficient manner, reducing the need for multiple specific nodes or complex configurations.
